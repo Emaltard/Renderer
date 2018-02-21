@@ -20,7 +20,7 @@ int main(int, char**)
 	GLFWwindow* window;
 	if (!glfwInit())
 		exit(EXIT_FAILURE);
-	window = glfwCreateWindow(1280, 720, "Simple example", NULL, NULL);
+	window = glfwCreateWindow(1280, 720, "Renderer", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -60,9 +60,8 @@ int main(int, char**)
 	//ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
 	//IM_ASSERT(font != NULL);
 
-	bool show_demo_window = true;
+	bool show_demo_window = false;
 	bool show_another_window = false;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	const double maxFPS = 60.0;
 	const double maxPeriod = 1.0 / maxFPS;
@@ -89,20 +88,25 @@ int main(int, char**)
 			//
 			// 1. Show a simple window.
 			// Tip: if we don't call ImGui::Begin()/ImGui::End() the widgets automatically appears in a window called "Debug".
+			static float size = 1.0f;
+			static float point_1_color[3] = {1, 0, 0};
+			static float point_2_color[3] = {1, 0, 1};
+			static float point_3_color[3] = {1, 1, 0};
 			{
-				static float f = 0.0f;
-				static int counter = 0;
-				ImGui::Text("Hello, world!");      // Display some text (you can use a format string too)
-				ImGui::SliderFloat("float", &f, 0.0f, 1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
-				ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+				ImGui::Text("Triangle Editor");      // Display some text (you can use a format string too)
+				ImGui::SliderFloat("Size", &size, 0.0f, 1.0f); // Edit 1 float using a slider from 0.0f to 1.0f
+				ImGui::ColorEdit3("Point 1 Color", point_1_color); // Edit 3 floats representing a color
+				ImGui::ColorEdit3("Point 2 Color", point_2_color);
+				ImGui::ColorEdit3("Point 3 Color", point_3_color);
 
-				ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our windows open/close state
-				ImGui::Checkbox("Another Window", &show_another_window);
-
-				if (ImGui::Button("Button"))       // Buttons return true when clicked (NB: most widgets return true when edited/activated)
-					counter++;
-				ImGui::SameLine();
-				ImGui::Text("counter = %d", counter);
+				// ImGui::Checkbox("Demo Window", &show_demo_window); // Edit bools storing our windows open/close state
+				// ImGui::Checkbox("Another Window", &show_another_window);
+        //
+				//static int counter = 0;
+				// if (ImGui::Button("Button"))       // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+				// 	counter++;
+				// ImGui::SameLine();
+				// ImGui::Text("counter = %d", counter);
 
 				ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 			}
@@ -138,12 +142,12 @@ int main(int, char**)
 			glLoadIdentity();
 			glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
 			glBegin(GL_TRIANGLES);
-			glColor3f(1.f, 0.f, 0.f);
-			glVertex3f(-0.6f, -0.4f, 0.f);
-			glColor3f(0.f, 1.f, 0.f);
-			glVertex3f(0.6f, -0.4f, 0.f);
-			glColor3f(0.f, 0.f, 1.f);
-			glVertex3f(0.f, 0.6f, 0.f);
+			glColor3f(point_1_color[0], point_1_color[1], point_1_color[2]);
+			glVertex3f(-0.6f*size, -0.4f*size, 0.f);
+			glColor3f(point_2_color[0], point_2_color[1], point_2_color[2]);
+			glVertex3f(0.6f*size, -0.4f*size, 0.f);
+			glColor3f(point_3_color[0], point_3_color[1], point_3_color[2]);
+			glVertex3f(0.f, 0.6f*size, 0.f);
 
 			glEnd();
 
